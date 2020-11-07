@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+    <h:form>
+        <p:panel>
+            <p:inputTextarea autoResize="true" rows="5" value="#{queryController.currentQuery}" cols="80"
+                             addLine="true" />
+            <p:commandButton value="execute" ajax="false" action="#{queryController.execute()}"/>
+        </p:panel>
+    </h:form>
+</ui:composition>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="common.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <h:form>
+            <p:menubar>
+                <p:menuitem ajax="false" value="Data"
+                            action="#{tableLevelController.setTable(tableLevelController.table)}"/>
+                <p:menuitem ajax="false" value="Structure" action="#{tableLevelController.structure}"/>
+                <p:menuitem ajax="false" value="Insert" action="#{tableLevelController.insert}"/>
+                <p:menuitem ajax="false" value="SQL" action="#{queryController.showTableQuery}"/>
+            </p:menubar>
+            <h2>#{tableLevelController.table.name}</h2>
+            <p:dataTable value="#{tableLevelController.columns}" var="column">
+                <p:column headerText="Nom Colonne">
+                    <p:outputLabel value="#{column.name}"/>
+                </p:column>
+                <p:column headerText="Type">
+                    <p:outputLabel value="#{column.type}"/>
+                </p:column>
+                <p:column headerText="Unique">
+                    <p:outputLabel value="#{column.unique}"/>
+                </p:column>
+                <p:column headerText="Nullable">
+                    <p:outputLabel value="#{column.nullable}"/>
+                </p:column>
+                <p:column headerText="Primary Key">
+                    <p:outputLabel value="#{tableLevelController.table.isPrimaryKey(column)}"/>
+                </p:column>
+                <p:column headerText="Foreign Key">
+                    <p:outputLabel value="#{column['class'].simpleName eq 'ForeignKey'}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+>
+<h:head>
+    <title>Dataccess</title>
+    <link rel="stylesheet" href="stylesheets/style.css"/>
+    <h:outputScript library="webjars" name="font-awesome/5.15.1/js/all.js"/>
+    <h:outputStylesheet library="webjars" name="font-awesome/5.15.1/css/all-jsf.css"/>
+</h:head>
+<h:body styleClass="body">
+    <f:view>
+        <ui:insert name="header">
+            <ui:include src="header.xhtml"/>
+        </ui:insert>
+        <div class="row">
+            <div class="column-l">
+                <p:tree value="#{mainController.tree}" var="node" selectionMode="single">
+                    <p:treeNode>
+                        <h:form>
+                            <p:commandButton value="#{node.toString()}" action="#{mainController.nodeRedirection(node)}"
+                                             ajax="false" styleClass="tree-button"/>
+                        </h:form>
+                    </p:treeNode>
+                </p:tree>
+            </div>
+            <div class="column-b">
+                <ui:insert name="content">
+                    <p:outputLabel value="default content"/>
+                </ui:insert>
+            </div>
+        </div>
+        <ui:insert name="footer">
+        </ui:insert>
+    </f:view>
+</h:body>
+</html>

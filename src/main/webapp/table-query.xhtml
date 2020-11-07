@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="common.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:define name="content">
+        <h:form>
+            <p:menubar>
+                <p:menuitem ajax="false" value="Data"
+                            action="#{tableLevelController.setTable(tableLevelController.table)}"/>
+                <p:menuitem ajax="false" value="Structure" action="#{tableLevelController.structure}"/>
+                <p:menuitem ajax="false" value="Insert" action="#{tableLevelController.insert}"/>
+                <p:menuitem ajax="false" value="SQL" action="#{queryController.showTableQuery}"/>
+            </p:menubar>
+            <div class="row">
+            <div class="column-b" style="width: 70%">
+                <p:panel>
+                    <p:inputTextarea autoResize="true" rows="5" value="#{queryController.currentQuery}" cols="80"
+                                     addLine="true"/>
+                    <p:commandButton value="execute" ajax="false" action="#{queryController.executeTableQuery()}"/>
+                </p:panel>
+            </div>
+            <div class="column-l" style="width: 30%">
+                <p:panel>
+                    <c:forEach items="#{tableLevelController.table.primaryKeys}" var="pk">
+                        <p:outputLabel value="#{pk.name}"/><br/>
+                    </c:forEach>
+                    <c:forEach items="#{tableLevelController.table.foreignKeys}" var="fk">
+                        <p:outputLabel value="#{fk.name}"/><br/>
+                    </c:forEach>
+                    <c:forEach items="#{tableLevelController.table.attributes}" var="c">
+                        <p:outputLabel value="#{c.name}"/><br/>
+                    </c:forEach>
+                </p:panel>
+            </div>
+            </div>
+            <p:dataTable rendered="#{queryController.currentResult != null}"
+                         value="#{queryController.currentResult.rows}" var="row">
+                <p:columns var="attr" value="#{queryController.currentResult.attributes}">
+                    <f:facet name="header">#{attr.name}</f:facet>
+                    <p:outputLabel value="#{row.getAttribute(attr.name)}"/>
+                </p:columns>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

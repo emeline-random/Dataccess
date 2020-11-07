@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="common.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="content">
+        <h:form>
+            <p:menubar >
+                <p:menuitem ajax="false" value="Data" action="#{tableLevelController.setTable(tableLevelController.table)}"/>
+                <p:menuitem ajax="false" value="Structure" action="#{tableLevelController.structure}"/>
+                <p:menuitem ajax="false" value="Insert" action="#{tableLevelController.insert}"/>
+                <p:menuitem ajax="false" value="SQL" action="#{queryController.showTableQuery}"/>
+            </p:menubar>
+            <p:dataTable value="#{tableLevelController.getRows()}" var="row" id="table" styleClass="column-b">
+                <p:columns var="pk" value="#{tableLevelController.table.primaryKeys}">
+                    <f:facet name="header">#{pk}</f:facet>
+                    <p:commandLink value="#{row.getAttribute(pk.name)}" ajax="false"
+                                   action="#{tableLevelController.seeRow(row)}"/>
+                </p:columns>
+                <p:columns var="attr" value="#{tableLevelController.table.attributes}">
+                    <f:facet name="header">#{attr}</f:facet>
+                    <p:outputLabel value="#{row.getAttribute(attr)}"/>
+                </p:columns>
+                <p:columns var="fk" value="#{tableLevelController.table.foreignKeys}">
+                    <f:facet name="header">#{fk}</f:facet>
+                    <p:commandLink value="#{row.getAttribute(fk)}" ajax="false"
+                                   action="#{tableLevelController.seeParentRow(fk, row)}"/>
+                </p:columns>
+                <p:column headerText="Delete">
+                    <p:commandButton value="Delete row" action="#{tableLevelController.dropRow(row)}" ajax="false"/>
+                </p:column>
+            </p:dataTable>
+            <p:commandButton value="add row" ajax="false" action="#{tableLevelController.createRow}"/>
+            <p:panel rendered="#{tableLevelController.row != null}">
+                <ui:repeat value="#{tableLevelController.row.values}" var="entry" varStatus="status">
+                    <p:outputLabel value="#{tableLevelController.row.keys.get(status.index)} "/>
+                    <h:inputText value="#{tableLevelController.row.values[status.index]}"/>
+                    <!--                TODO récupérer le contrôleur en fonction du type de la colonne-->
+                </ui:repeat>
+                <p:commandButton value="add row" ajax="false" action="#{tableLevelController.addRow}"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+    <ui:define name="footer"/>
+</ui:composition>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="common.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="content">
+        <h:form>
+            <p:menubar>
+                <p:menuitem ajax="false" value="Data"
+                            action="#{tableLevelController.setTable(tableLevelController.table)}"/>
+                <p:menuitem ajax="false" value="Structure" action="#{tableLevelController.structure}"/>
+                <p:menuitem ajax="false" value="Insert" action="#{tableLevelController.insert}"/>
+                <p:menuitem ajax="false" value="SQL" action="#{queryController.showTableQuery}"/>
+            </p:menubar>
+            <p:selectOneMenu value="#{tableLevelController.insertValue}" converter="javax.faces.Integer">
+                <f:selectItems id="item" value="#{tableLevelController.insertValues}"/>
+                <p:ajax event="change" oncomplete="submit();"/>
+            </p:selectOneMenu>
+            <ui:repeat value="#{tableLevelController.insertedRows}" var="aRow">
+                <p:panel>
+                    <ui:repeat value="#{aRow.values}" var="entry" varStatus="status">
+                        <p:outputLabel value="#{aRow.keys.get(status.index)} "/>
+                        <h:inputText value="#{aRow.values[status.index]}"/>
+                        <!--                TODO récupérer le contrôleur en fonction du type de la colonne-->
+                    </ui:repeat>
+                    <p:commandButton value="add row" ajax="false" action="#{tableLevelController.addRow(aRow)}"/>
+                </p:panel>
+            </ui:repeat>
+            <p:commandButton value="add rows" ajax="false" action="#{tableLevelController.addRows}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

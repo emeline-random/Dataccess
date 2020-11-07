@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="common.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+    <h:form>
+        <p:outputLabel for="table-name" value="Table name"/>
+        <p:inputText id="table-name" value="#{addTableController.table.name}" required="true"/><br/>
+        <p:outputLabel value="Primary key(s)"/>
+        <p:commandButton value="Add primary key" ajax="false" action="#{addTableController.addPrimaryKey}"/><br/>
+        <p:dataTable value="#{addTableController.table.primaryKeys}" var="pk">
+            <p:column headerText="name">
+                <p:inputText value="#{pk.name}"/>
+            </p:column>
+            <p:column headerText="type">
+                <p:inputText value="#{pk.type}"/>
+            </p:column>
+            <p:column headerText="Remove">
+                <p:commandButton value="Remove" action="#{addTableController.removePK(pk)}" ajax="false"/>
+            </p:column>
+        </p:dataTable><br/>
+        <p:outputLabel value="Foreign key(s)"/>
+        <p:commandButton value="Add foreign key" ajax="false" action="#{addTableController.addForeignKey}"/><br/>
+        <p:dataTable value="#{addTableController.table.foreignKeys}" var="fk">
+            <p:column headerText="name">
+                <p:inputText value="#{fk.name}" required="true"/>
+            </p:column>
+            <p:column headerText="type">
+                <p:inputText value="#{fk.type}" required="true"/>
+            </p:column>
+            <p:column headerText="referenced table">
+                <p:inputText value="#{fk.referencedTableName}" required="true"/>
+            </p:column>
+            <p:column headerText="referenced column">
+                <p:inputText value="#{fk.referencedColumnName}" required="true"/>
+            </p:column>
+            <p:column headerText="Remove">
+                <p:commandButton value="Remove" action="#{addTableController.removeFK(fk)}" ajax="false"/>
+            </p:column>
+        </p:dataTable><br/>
+        <p:outputLabel value="Column(s)"/>
+        <p:commandButton value="Add column" ajax="false" action="#{addTableController.addColumn}"/><br/>
+        <p:dataTable value="#{addTableController.table.attributes}" var="attr">
+            <p:column headerText="name">
+                <p:inputText value="#{attr.name}" required="true"/>
+            </p:column>
+            <p:column headerText="type">
+                <p:inputText value="#{attr.type}" required="true"/>
+            </p:column>
+            <p:column headerText="nullable">
+                <p:inputText value="#{attr.nullable}" converter="javax.faces.Boolean" required="true"/>
+            </p:column>
+            <p:column headerText="unique">
+                <p:inputText value="#{attr.unique}" converter="javax.faces.Boolean" required="true"/>
+            </p:column>
+            <p:column headerText="remove">
+                <p:commandButton value="Remove" action="#{addTableController.removeColumn(attr)}" ajax="false"/>
+            </p:column>
+        </p:dataTable><br/>
+        <p:commandButton value="preview" ajax="false" action="#{addTableController.previewTable}"/><br/>
+        <p:commandButton value="create table" ajax="false" action="#{addTableController.createTable}"/><br/>
+    </h:form>
+    </ui:define>
+    <ui:define name="footer"/>
+</ui:composition>

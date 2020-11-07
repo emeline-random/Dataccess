@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="common.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="content">
+    <h:form>
+        <p:messages autoUpdate="true"/>
+        <p:dataTable value="#{globalLevelController.databases}" var="dt">
+            <p:column>
+                <f:facet name="header">database name</f:facet>
+                <p:outputLabel value="#{dt.name}"/>
+            </p:column>
+            <p:column>
+                <f:facet name="header">Details</f:facet>
+                <p:commandButton ajax="false" value="see database" action="#{databaseLevelController.setDatabase(dt)}"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+    </ui:define>
+    <ui:define name="footer"/>
+</ui:composition>

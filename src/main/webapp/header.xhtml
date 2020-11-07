@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui">
+    <ui:composition>
+        <h:form>
+            <p:breadCrumb>
+                <p:menuitem value="home" action="#{mainController.home}" ajax="false" icon="fas fa-home fa-sm"/>
+                <p:menuitem rendered="#{mainController.currentBase != null}" value="#{mainController.currentBase.name}"
+                            ajax="false" action="#{mainController.seeBase()}"/>
+                <p:menuitem rendered="#{mainController.currentTable != null}"
+                            value="#{mainController.currentTable.name}"
+                            ajax="false" action="#{mainController.seeTable()}"/>
+                <p:menuitem rendered="#{mainController.currentRow != null}"
+                            value="#{mainController.currentRowPK}"
+                            ajax="false" action="#{mainController.seeRow()}"/>
+                <p:menuitem value="Query" action="#{mainController.query}" ajax="false"/>
+            </p:breadCrumb>
+            <p:messages autoUpdate="true"/>
+        </h:form>
+    </ui:composition>
+</f:view>

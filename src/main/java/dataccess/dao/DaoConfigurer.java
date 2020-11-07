@@ -13,25 +13,21 @@ import java.util.Properties;
 @Component
 public class DaoConfigurer {
 
-    private String username;
-    private String password;
-    private String driver;
-    private String url;
     private DataSource source;
 
     public DaoConfigurer() {
-        try (FileInputStream fis = new FileInputStream("application.properties")) {
+        try (FileInputStream fis = new FileInputStream("target/classes/application.properties")) {
             Properties prop = new Properties();
             prop.load(fis);
-            this.username = prop.getProperty("spring.datasource.username");
-            this.password = prop.getProperty("spring.datasource.password");
-            this.driver = prop.getProperty("spring.datasource.driver-class-name");
-            this.url = prop.getProperty("spring.datasource.url");
+            String username = prop.getProperty("spring.datasource.username");
+            String password = prop.getProperty("spring.datasource.password");
+            String driver = prop.getProperty("spring.datasource.driver-class-name");
+            String url = prop.getProperty("spring.datasource.url");
             PoolProperties p = new PoolProperties();
-            p.setUrl(this.url);
-            p.setDriverClassName(this.driver);
-            p.setUsername(this.username);
-            p.setPassword(this.password);
+            p.setUrl(url);
+            p.setDriverClassName(driver);
+            p.setUsername(username);
+            p.setPassword(password);
             this.source = new org.apache.tomcat.jdbc.pool.DataSource(p);
             this.source.setPoolProperties(p);
             System.out.println("la source est configurée");
@@ -42,37 +38,5 @@ public class DaoConfigurer {
 
     public Connection getConnection() throws SQLException {
         return this.source.getConnection();
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getDriver() {
-        return driver;
-    }
-
-    public void setDriver(String driver) {
-        this.driver = driver;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 }

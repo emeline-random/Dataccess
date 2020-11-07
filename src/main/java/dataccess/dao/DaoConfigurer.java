@@ -20,7 +20,7 @@ public class DaoConfigurer {
     private DataSource source;
 
     public DaoConfigurer() {
-        try (FileInputStream fis = new FileInputStream("C:\\Users\\mimin\\IdeaProjects\\DatabaseAccess\\src\\main\\resources\\application.properties")) {
+        try (FileInputStream fis = new FileInputStream("application.properties")) {
             Properties prop = new Properties();
             prop.load(fis);
             this.username = prop.getProperty("spring.datasource.username");

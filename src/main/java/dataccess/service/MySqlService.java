@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-@Primary
+//@Primary
 public class MySqlService implements QueryService {
 
     private DatabaseAccess access;
@@ -122,6 +122,11 @@ public class MySqlService implements QueryService {
                         " where " + foreignKey.getReferencedColumnName() + " = '" +
                         row.getAttribute(foreignKey.getName()) + "'");
         return this.getParentRow(res);
+    }
+
+    @Override
+    public void dropDatabase(Database database) throws DaoAccessException {
+        this.access.executeUpdate("drop database " + database.getName());
     }
 
     @Override

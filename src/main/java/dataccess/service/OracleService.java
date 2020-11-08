@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-//@Primary
+@Primary
 public class OracleService implements QueryService {
 
     private DatabaseAccess access;
@@ -48,7 +48,7 @@ public class OracleService implements QueryService {
         ArrayList<Table> tables = new ArrayList<>();
         try {
             while (res.next()) {
-                tables.add(new Table(res.getString("OBJECT_NAME")));
+                tables.add(new Table(res.getString("OBJECT_NAME"), database));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,26 +60,29 @@ public class OracleService implements QueryService {
 
     @Override
     public ArrayList<Row> getRows(Table table) throws DaoAccessException {
-        ResultSet res = this.access.execute("select * from " + table.getName());
+        ResultSet res = this.access.execute("select * from " + table.getDatabase().getName() + "."
+                + table.getName());
         return this.getRows(res);
     }
 
     @Override
     public ArrayList<Column> getAttributes(Table table) throws DaoAccessException {
         ResultSet result = this.access.execute("SELECT column_name, data_type\n" +
-                "FROM USER_TAB_COLUMNS\n" +
-                "WHERE table_name = '" + table.getName() + "'");
+                "FROM ALL_TAB_COLUMNS\n" +
+                "WHERE table_name = '" + table.getName() + "' " +
+                "AND upper(owner)='" + table.getDatabase().getName().toUpperCase() + "'");
         return this.getAttributes(result);
     }
 
     @Override
     public ArrayList<ForeignKey> getForeignKeys(Table table) throws DaoAccessException {
         ResultSet rs = this.access.execute("SELECT DISTINCT a.column_name child_column, b.table_name parent_table, b.column_name parent_column\n" +
-                "  FROM all_cons_columns a\n" +
-                "  JOIN all_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name\n" +
-                " join all_cons_columns b on c.owner = b.owner and c.r_constraint_name = b.constraint_name\n" +
+                " FROM all_cons_columns a" +
+                " JOIN all_constraints c ON a.owner = c.owner AND a.constraint_name = c.constraint_name" +
+                " join all_cons_columns b on c.owner = b.owner and c.r_constraint_name = b.constraint_name" +
                 " WHERE c.constraint_type = 'R'\n" +
-                "   AND a.table_name = '" + table.getName() + "'");
+                " AND a.table_name = '" + table.getName() + "'" +
+                " AND upper(a.owner)='" + table.getDatabase().getName() + "'");
         ArrayList<ForeignKey> keys = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -96,9 +99,10 @@ public class OracleService implements QueryService {
 
     @Override
     public ArrayList<String> getPrimaryKey(Table table) throws DaoAccessException {
-        ResultSet res = this.access.execute("SELECT column_name FROM all_cons_columns WHERE constraint_name = (\n" +
-                "  SELECT constraint_name FROM user_constraints \n" +
-                "  WHERE UPPER(table_name) = UPPER('" + table.getName().toUpperCase() + "') AND CONSTRAINT_TYPE = 'P'\n" +
+        ResultSet res = this.access.execute("SELECT column_name FROM all_cons_columns WHERE constraint_name = (" +
+                " SELECT constraint_name FROM all_constraints \n" +
+                " WHERE UPPER(table_name) = UPPER('" + table.getName().toUpperCase() + "') AND CONSTRAINT_TYPE = 'P'" +
+                " AND UPPER(owner)='" + table.getDatabase().getName().toUpperCase() + "'" +
                 ")");
         ArrayList<String> keys = new ArrayList<>();
         try {
@@ -116,7 +120,7 @@ public class OracleService implements QueryService {
 
     @Override
     public void truncateTable(Table table) throws DaoAccessException {
-        this.access.executeUpdate("truncate table " + table.getName());
+        this.access.executeUpdate("truncate table " + table.getDatabase().getName() + "." + table.getName());
     }
 
     @Override
@@ -129,9 +133,15 @@ public class OracleService implements QueryService {
     }
 
     @Override
+    public void dropDatabase(Database database) throws DaoAccessException {
+        this.access.execute("drop user " + database.getName());
+    }
+
+    @Override
     public void addTable(Table table) throws DaoAccessException {
         //start of the query
-        StringBuilder query = new StringBuilder("create table ").append(table.getName()).append(" (");
+        StringBuilder query = new StringBuilder("create table ").append(table.getDatabase().getName())
+                .append(".").append(table.getName()).append(" (");
         //primary key(s)
         List<Column> primaryKeys = table.getPrimaryKeys();
         if (primaryKeys.isEmpty()) throw new DaoAccessException("no primary key");
@@ -171,14 +181,15 @@ public class OracleService implements QueryService {
 
     @Override
     public void dropTable(Table table) throws DaoAccessException {
-        this.access.execute("drop table " + table.getName());
+        this.access.execute("drop table " + table.getDatabase().getName() + "." + table.getName());
         this.access.closeConnection();
     }
 
     @Override
     public void addRow(Table table, Row row) throws DaoAccessException {
         ArrayList<Column> tableAttr = this.getAttributes(table);
-        StringBuilder query = new StringBuilder("insert into " + table.getName() + " values (");
+        StringBuilder query = new StringBuilder("insert into " + table.getDatabase().getName() + "." +
+                table.getName() + " values (");
         if (Type.isString(tableAttr.get(0).getSqlType())) query.append("'");
         for (int i = 0; i < tableAttr.size() - 1; i++) {
             boolean stringAttr = Type.isString(tableAttr.get(i).getSqlType());

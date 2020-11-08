@@ -10,7 +10,8 @@
                 <p:menuitem ajax="false" value="SQL" action="#{queryController.showDatabaseQuery}"/>
                 <p:menuitem ajax="false" value="Operations" action="#{databaseLevelController.operations}"/>
             </p:menubar>
-
+            <p:commandButton action="#{databaseLevelController.dropDatabase}" value="Drop database" ajax="false"/>
+            <p:commandButton action="#{databaseLevelController.dropAllTables}" value="Drop all tables" ajax="false"/>
         </h:form>
     </ui:define>
 </ui:composition>

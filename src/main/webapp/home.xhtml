@@ -4,7 +4,6 @@
                 xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
     <ui:define name="content">
     <h:form>
-        <p:messages autoUpdate="true"/>
         <p:dataTable value="#{globalLevelController.databases}" var="dt">
             <p:column>
                 <f:facet name="header">database name</f:facet>

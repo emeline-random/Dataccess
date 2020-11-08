@@ -91,7 +91,7 @@ public class MainController {
         return "query-result";
     }
 
-    public String nodeRedirection(Object node ) throws IOException { //TODO forcer le rechargement de la table car ne change rien si on ne cahnge pas de page
+    public String nodeRedirection(Object node) { //TODO forcer le rechargement de la table car ne change rien si on ne cahnge pas de page
         if (node instanceof Database) {
             this.databaseLevelController.setDatabase((Database) node);
             return "see-database";

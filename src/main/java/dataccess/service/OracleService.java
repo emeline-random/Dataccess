@@ -20,37 +20,6 @@ public class OracleService implements QueryService {
     private DatabaseAccess access;
 
     @Override
-    public void completeTable(Table table) throws DaoAccessException { //TODO compléter les colonnes pour savoir si c'est nullable/unique
-        ArrayList<Column> columns = this.getAttributes(table);
-        ArrayList<Column> pk = new ArrayList<>();
-        for (String key : this.getPrimaryKey(table)) {
-            for (Column c : columns) {
-                if (c.getName().equalsIgnoreCase(key)) {
-                    pk.add(new Column(key, c.getType()));
-                    break;
-                }
-            }
-            columns.removeIf(column -> column.getName().toUpperCase().equals(key.toUpperCase()));
-        }
-        ArrayList<ForeignKey> fk = this.getForeignKeys(table);
-        for (ForeignKey foreignKey : fk) {
-            for (Column c : columns) {
-                if (c.getName().equalsIgnoreCase(foreignKey.getName())) {
-                    foreignKey.setType(c.getType());
-                    break;
-                }
-            }
-            columns.removeIf(column -> column.getName().equalsIgnoreCase(foreignKey.getName()));
-        }
-        columns.removeIf(column -> fk.stream().anyMatch(foreignKey ->
-                foreignKey.getName().toUpperCase().equals(column.getName().toUpperCase())));
-        table.setForeignKeys(fk);
-        table.setAttributes(columns);
-        table.setPrimaryKeys(pk);
-        table.setRows(this.getRows(table));
-    }
-
-    @Override
     public ArrayList<Database> getDatabases() throws DaoAccessException {
         ResultSet res = this.access.execute("select username as schema_name\n" +
                 "from sys.all_users\n" +

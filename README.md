@@ -9,7 +9,7 @@ Web application that allows you to administer an Oracle database or a MySql data
 To use a Mysql database you need to use the configuration bellow and to change the password and the username in src/main/resources/application.properties. The user must have all privileges on all databases to be able to use all the features of the application. The configuration for oracle needs to be commented.
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/sakila?serverTimezone=UTC
+spring.datasource.url=jdbc:mysql://localhost:3306/?serverTimezone=UTC
 spring.datasource.username=username
 spring.datasource.password=password
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver

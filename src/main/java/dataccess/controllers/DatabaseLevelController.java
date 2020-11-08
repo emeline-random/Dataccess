@@ -4,6 +4,7 @@ import dataccess.dao.DaoAccessException;
 import dataccess.model.Database;
 import dataccess.model.Table;
 import dataccess.service.QueryService;
+import lombok.Getter;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.util.Collection;
 @Controller
 public class DatabaseLevelController {
 
+    @Getter
     private Database database;
     private QueryService service;
     private MainController mainController;

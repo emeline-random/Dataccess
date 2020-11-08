@@ -14,8 +14,14 @@ public class Table {
     private ArrayList<Column> attributes;
     private ArrayList<ForeignKey> foreignKeys;
     private List<Column> primaryKeys; //TODO récupérer les types de chaque colonne
+    private Database database;
 
     public Table(String name) {
+        this.name = name;
+    }
+
+    public Table(String name, Database database) {
+        this.database = database;
         this.name = name;
     }
 

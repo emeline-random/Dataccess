@@ -1,6 +1,6 @@
 package dataccess.controllers;
 
-import dataccess.Tree;
+import dataccess.components.Tree;
 import dataccess.dao.DaoAccessException;
 import dataccess.model.Column;
 import dataccess.model.Database;
@@ -9,7 +9,6 @@ import dataccess.model.Table;
 import dataccess.service.QueryService;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.event.NodeSelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 

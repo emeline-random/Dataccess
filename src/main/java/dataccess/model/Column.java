@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @EqualsAndHashCode
 public class Column {
@@ -44,4 +45,5 @@ public class Column {
     public String toString() {
         return this.name;
     }
+
 }

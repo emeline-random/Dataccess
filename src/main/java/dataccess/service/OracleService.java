@@ -90,24 +90,7 @@ public class OracleService implements QueryService {
     @Override
     public ArrayList<Row> getRows(Table table) throws DaoAccessException {
         ResultSet res = this.access.execute("select * from " + table.getName());
-        ArrayList<Row> rows = new ArrayList<>();
-        try {
-            while (res.next()) {
-                Row row = new Row();
-                HashMap<String, Object> attributes = new HashMap<>();
-                for (int i = 1; i <= res.getMetaData().getColumnCount(); i++) {
-                    attributes.put(res.getMetaData().getColumnName(i), res.getString(i));
-                }
-                row.setAttributes(attributes);
-                rows.add(row);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DaoAccessException(e);
-        } finally {
-            this.access.closeConnection();
-        }
-        return rows;
+        return this.getRows(res);
     }
 
     @Override
@@ -115,17 +98,7 @@ public class OracleService implements QueryService {
         ResultSet result = this.access.execute("SELECT column_name, data_type\n" +
                 "FROM USER_TAB_COLUMNS\n" +
                 "WHERE table_name = '" + table.getName() + "'");
-        ArrayList<Column> attributes = new ArrayList<>();
-        try {
-            while (result.next()) {
-                attributes.add(new Column(result.getString("column_name"), result.getString("data_type")));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            this.access.closeConnection();
-        }
-        return attributes;
+        return this.getAttributes(result);
     }
 
     @Override
@@ -176,21 +149,7 @@ public class OracleService implements QueryService {
                 "select * from " + foreignKey.getReferencedTableName() +
                         " where " + foreignKey.getReferencedColumnName() + " = '" +
                         row.getAttribute(foreignKey.getName()) + "'");
-        Row parent = new Row();
-        try {
-            res.next();
-            HashMap<String, Object> attributes = new HashMap<>();
-            for (int i = 1; i <= res.getMetaData().getColumnCount(); i++) {
-                attributes.put(res.getMetaData().getColumnName(i), res.getString(i));
-            }
-            parent.setAttributes(attributes);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DaoAccessException(e);
-        } finally {
-            this.access.closeConnection();
-        }
-        return parent;
+        return this.getParentRow(res);
     }
 
     @Override

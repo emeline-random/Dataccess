@@ -46,6 +46,15 @@ public class DatabaseAccess {
         }
     }
 
+    public void executeUpdate(String query) throws DaoAccessException {
+        try {
+            this.getStatement().executeUpdate(query);
+        } catch (SQLException | DaoAccessException throwables) {
+            throwables.printStackTrace();
+            throw new DaoAccessException(throwables);
+        }
+    }
+
     public void closeConnection() throws DaoAccessException {
         if (this.connection != null) {
             try {
@@ -55,6 +64,11 @@ public class DatabaseAccess {
                 throw new DaoAccessException(throwables);
             }
         }
+    }
+
+    public void changeMysqlDatabase(String database) throws DaoAccessException {
+        this.closeConnection();
+        this.configurer.setMySqlDatabase(database);
     }
 
     @Autowired

@@ -30,8 +30,8 @@ public class GlobalLevelController {
         try {
             this.databases = this.service.getDatabases();
             DefaultTreeNode root = this.controller.getTree();
+            root.getChildren().clear();
             for (Database d : this.databases) {
-                root.getChildren().clear();
                 root.getChildren().add(new DefaultTreeNode(d));
             }
         } catch (DaoAccessException e) {

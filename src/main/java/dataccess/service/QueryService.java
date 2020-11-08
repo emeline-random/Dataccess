@@ -3,8 +3,10 @@ package dataccess.service;
 import dataccess.dao.DaoAccessException;
 import dataccess.model.*;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface QueryService {
 
@@ -16,13 +18,60 @@ public interface QueryService {
 
     ArrayList<Row> getRows(Table table) throws DaoAccessException;
 
+    default ArrayList<Row> getRows(ResultSet res) throws DaoAccessException {
+        ArrayList<Row> rows = new ArrayList<>();
+        try {
+            while (res.next()) {
+                Row row = new Row();
+                HashMap<String, Object> attributes = new HashMap<>();
+                for (int i = 1; i <= res.getMetaData().getColumnCount(); i++) {
+                    attributes.put(res.getMetaData().getColumnName(i), res.getString(i));
+                }
+                row.setAttributes(attributes);
+                rows.add(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DaoAccessException(e);
+        }
+        return rows;
+    }
+
     ArrayList<Column> getAttributes(Table table) throws DaoAccessException;
+
+    default ArrayList<Column> getAttributes(ResultSet result) {
+        ArrayList<Column> attributes = new ArrayList<>();
+        try {
+            while (result.next()) {
+                attributes.add(new Column(result.getString("column_name"), result.getString("data_type")));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return attributes;
+    }
 
     ArrayList<ForeignKey> getForeignKeys(Table table) throws DaoAccessException;
 
     ArrayList<String> getPrimaryKey(Table table) throws DaoAccessException;
 
     Row getParentRow(ForeignKey foreignKey, Row row) throws DaoAccessException;
+
+    default Row getParentRow(ResultSet res) throws DaoAccessException {
+        Row parent = new Row();
+        try {
+            res.next();
+            HashMap<String, Object> attributes = new HashMap<>();
+            for (int i = 1; i <= res.getMetaData().getColumnCount(); i++) {
+                attributes.put(res.getMetaData().getColumnName(i), res.getString(i));
+            }
+            parent.setAttributes(attributes);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DaoAccessException(e);
+        }
+        return parent;
+    }
 
     void addTable(Table table) throws DaoAccessException;
 

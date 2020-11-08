@@ -3,6 +3,7 @@ package dataccess.controllers;
 
 import dataccess.dao.DaoAccessException;
 import dataccess.model.Column;
+import dataccess.model.Database;
 import dataccess.model.ForeignKey;
 import dataccess.model.Table;
 import dataccess.service.QueryService;
@@ -17,6 +18,7 @@ public class AddTableController {
     private Table table;
     private QueryService service;
     private TableLevelController tableLevelController;
+    private DatabaseLevelController databaseLevelController;
 
     public String createTable() throws DaoAccessException {
         this.service.addTable(this.table);
@@ -44,7 +46,7 @@ public class AddTableController {
     }
 
     public String addTable() {
-        this.table = new Table("table name");
+        this.table = new Table("table name", this.databaseLevelController.getDatabase());
         this.table.setPrimaryKeys(new ArrayList<>());
         this.table.setForeignKeys(new ArrayList<>());
         this.table.setAttributes(new ArrayList<>());
@@ -71,5 +73,10 @@ public class AddTableController {
     @Autowired
     public void setService(QueryService service) {
         this.service = service;
+    }
+
+    @Autowired
+    public void setDatabaseLevelController(DatabaseLevelController databaseLevelController) {
+        this.databaseLevelController = databaseLevelController;
     }
 }

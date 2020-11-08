@@ -10,6 +10,7 @@
                 <p:menuitem ajax="false" value="Structure" action="#{tableLevelController.structure}"/>
                 <p:menuitem ajax="false" value="Insert" action="#{tableLevelController.insert}"/>
                 <p:menuitem ajax="false" value="SQL" action="#{queryController.showTableQuery}"/>
+                <p:menuitem ajax="false" value="Operations" action="#{tableLevelController.operations}"/>
             </p:menubar>
             <p:selectOneMenu value="#{tableLevelController.insertValue}" converter="javax.faces.Integer">
                 <f:selectItems id="item" value="#{tableLevelController.insertValues}"/>

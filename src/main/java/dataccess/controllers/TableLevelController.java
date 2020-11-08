@@ -7,7 +7,6 @@ import dataccess.model.Row;
 import dataccess.model.Table;
 import dataccess.service.QueryService;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -27,6 +26,7 @@ public class TableLevelController { //TODO rajouter un onglet sql plutot qu'un p
     private QueryService service;
     private RowLevelController rowLevelController;
     private MainController mainController;
+    private DatabaseLevelController databaseLevelController;
     @Getter
     private Integer insertValue = 1;
     @Getter
@@ -34,11 +34,11 @@ public class TableLevelController { //TODO rajouter un onglet sql plutot qu'un p
     @Getter
     private final ArrayList<Row> insertedRows = new ArrayList<>();
 
-    public void setInsertValue (Integer insertValue) {
-        this.insertValue=insertValue;
+    public void setInsertValue(Integer insertValue) {
+        this.insertValue = insertValue;
         int size = this.insertedRows.size();
         if (size != insertValue) {
-            if (size < insertValue)  {
+            if (size < insertValue) {
                 for (int i = size; i < insertValue; i++) {
                     this.insertedRows.add(this.initRow());
                 }
@@ -126,6 +126,9 @@ public class TableLevelController { //TODO rajouter un onglet sql plutot qu'un p
     public void dropTable(Table table) {
         try {
             this.service.dropTable(table);
+            FacesContext.getCurrentInstance().addMessage("success", new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "table dropped successfully", ""));
+            this.databaseLevelController.setUp();
         } catch (DaoAccessException e) {
             FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     e.getMessage(), ""));
@@ -165,6 +168,22 @@ public class TableLevelController { //TODO rajouter un onglet sql plutot qu'un p
         if (viewId.contains("insert")) this.createRow();
     }
 
+    public void clear() {
+        try {
+            this.service.truncateTable(this.table);
+            FacesContext.getCurrentInstance().addMessage("success", new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "table truncated successfully", ""));
+        } catch (DaoAccessException e) {
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    e.getMessage(), ""));
+        }
+    }
+
+    public String dropTable() {
+        this.dropTable(this.table);
+        return "see-database";
+    }
+
     public void addRow(Row row) {
         try {
             row.convert();
@@ -174,12 +193,16 @@ public class TableLevelController { //TODO rajouter un onglet sql plutot qu'un p
             FacesContext.getCurrentInstance().addMessage("success", new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "row added successfully", ""));
             HashMap<String, Object> map = row.getAttributes();
-            map.forEach((s, o)-> o = null);
+            map.forEach((s, o) -> o = null);
             row.setAttributes(map);
         } catch (DaoAccessException e) {
             FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     e.getMessage(), ""));
         }
+    }
+
+    public String operations() {
+        return "operations";
     }
 
     public ArrayList<Column> getColumns() {
@@ -202,5 +225,10 @@ public class TableLevelController { //TODO rajouter un onglet sql plutot qu'un p
     @Autowired
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
+    }
+
+    @Autowired
+    public void setDatabaseLevelController(DatabaseLevelController databaseLevelController) {
+        this.databaseLevelController = databaseLevelController;
     }
 }

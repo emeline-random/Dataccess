@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="common.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="content">
+        <h:form>
+            <p:menubar >
+                <p:menuitem ajax="false" value="Data" action="#{tableLevelController.setTable(tableLevelController.table)}"/>
+                <p:menuitem ajax="false" value="Structure" action="#{tableLevelController.structure}"/>
+                <p:menuitem ajax="false" value="Insert" action="#{tableLevelController.insert}"/>
+                <p:menuitem ajax="false" value="SQL" action="#{queryController.showTableQuery}"/>
+                <p:menuitem ajax="false" value="Operations" action="#{tableLevelController.operations}"/>
+            </p:menubar>
+            <p:commandButton value="Truncate table" action="#{tableLevelController.clear}" ajax="false"/>
+            <p:commandButton value="Drop table" action="#{tableLevelController.dropTable}"
+                             ajax="false"/>
+        </h:form>
+    </ui:define>
+    <ui:define name="footer"/>
+</ui:composition>

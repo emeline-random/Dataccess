@@ -10,6 +10,7 @@
                 <p:menuitem ajax="false" value="Structure" action="#{tableLevelController.structure}"/>
                 <p:menuitem ajax="false" value="Insert" action="#{tableLevelController.insert}"/>
                 <p:menuitem ajax="false" value="SQL" action="#{queryController.showTableQuery}"/>
+                <p:menuitem ajax="false" value="Operations" action="#{tableLevelController.operations}"/>
             </p:menubar>
             <h2>#{tableLevelController.table.name}</h2>
             <p:dataTable value="#{tableLevelController.columns}" var="column">

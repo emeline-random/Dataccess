@@ -20,7 +20,7 @@ Then to register the correct spring service you need to check that the annotatio
 
 ### Oracle configuration
 
-To use an Oracle database you need to use the configuration bellow and to change the password and the username in src/main/resources/application.properties. The configuration for Mysql needs to be commented.
+To use an Oracle database you need to use the configuration bellow and to change the password and the username in src/main/resources/application.properties. To be able to use tha application the user needs to have all privileges on all schemas. The configuration for Mysql needs to be commented.
 
 ```properties
 spring.datasource.url=jdbc:oracle:thin:@localhost:1521/XE

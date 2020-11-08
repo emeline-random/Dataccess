@@ -113,6 +113,11 @@ public class OracleService implements QueryService {
     }
 
     @Override
+    public void truncateTable(Table table) throws DaoAccessException {
+        this.access.executeUpdate("truncate table " + table.getName());
+    }
+
+    @Override
     public Row getParentRow(ForeignKey foreignKey, Row row) throws DaoAccessException {
         ResultSet res = this.access.execute(
                 "select * from " + foreignKey.getReferencedTableName() +

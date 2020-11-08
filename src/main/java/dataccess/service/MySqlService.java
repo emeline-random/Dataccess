@@ -125,6 +125,11 @@ public class MySqlService implements QueryService {
     }
 
     @Override
+    public void truncateTable(Table table) throws DaoAccessException {
+        this.access.executeUpdate("truncate table " + table.getName());
+    }
+
+    @Override
     public void addTable(Table table) throws DaoAccessException {
         //start of the query
         StringBuilder query = new StringBuilder("create table ").append(table.getName()).append(" (");

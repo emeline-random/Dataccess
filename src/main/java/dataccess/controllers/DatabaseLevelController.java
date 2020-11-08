@@ -26,7 +26,7 @@ public class DatabaseLevelController {
         return this.database.getTables();
     }
 
-    private void setUp() {
+    void setUp() {
         try {
             this.database.setTables(this.service.getTables(this.database));
             if (this.mainController.getTree().getNode(this.database.getName()).getChildren().isEmpty()) {
@@ -42,7 +42,7 @@ public class DatabaseLevelController {
     }
 
     public String setDatabase(Database database) {
-        if (this.database == null || !this.database.getName().equalsIgnoreCase(database.getName())) {
+        if (this.database == null) {
             this.database = database;
             this.mainController.setCurrentBase(database);
             this.setUp();

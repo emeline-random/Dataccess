@@ -22,6 +22,7 @@ public class AddTableController {
 
     public String createTable() throws DaoAccessException {
         this.service.addTable(this.table);
+        this.databaseLevelController.setUp();
         return this.tableLevelController.setTable(this.table);
     }
 

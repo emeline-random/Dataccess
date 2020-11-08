@@ -3,9 +3,13 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui">
     <ui:define name="content">
-    <p:messages autoUpdate="true"/>
     <h:form>
-        <p:commandButton value="Add table" ajax="false" action="#{addTableController.addTable}"/><br/>
+        <p:menubar >
+            <p:menuitem ajax="false" value="Tables" action="#{databaseLevelController.seeTables}"/>
+            <p:menuitem ajax="false" value="Add table" action="#{addTableController.addTable}"/>
+            <p:menuitem ajax="false" value="SQL" action="#{queryController.showDatabaseQuery}"/>
+            <p:menuitem ajax="false" value="Operations" action="#{databaseLevelController.operations}"/>
+        </p:menubar>
         <p:dataTable value="#{databaseLevelController.tables}" var="table">
             <p:column headerText="table name">
                 <p:outputLabel value="#{table.name}"/>
@@ -16,6 +20,7 @@
             <p:column headerText="drop table">
                 <p:commandButton value="drop table" ajax="false" action="#{tableLevelController.dropTable(table)}"/>
             </p:column>
+            <p:commandButton value="Add table" ajax="false" action="#{addTableController.addTable}"/><br/>
         </p:dataTable>
     </h:form>
     </ui:define>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="common.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <h:form>
+            <p:menubar >
+                <p:menuitem ajax="false" value="Tables" action="#{databaseLevelController.seeTables}"/>
+                <p:menuitem ajax="false" value="Add table" action="#{addTableController.addTable}"/>
+                <p:menuitem ajax="false" value="SQL" action="#{queryController.showDatabaseQuery}"/>
+                <p:menuitem ajax="false" value="Operations" action="#{databaseLevelController.operations}"/>
+            </p:menubar>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

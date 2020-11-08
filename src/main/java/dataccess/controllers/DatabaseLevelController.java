@@ -47,7 +47,15 @@ public class DatabaseLevelController {
             this.mainController.setCurrentBase(database);
             this.setUp();
         }
+        return this.seeTables();
+    }
+
+    public String seeTables() {
         return "see-database";
+    }
+
+    public String operations() {
+        return "database-operations";
     }
 
     @Autowired

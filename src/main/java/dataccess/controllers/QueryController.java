@@ -66,6 +66,10 @@ public class QueryController {
         return "table-query";
     }
 
+    public String showDatabaseQuery() {
+        return "database-query";
+    }
+
     @Autowired
     public void setService(QueryService service) {
         this.service = service;

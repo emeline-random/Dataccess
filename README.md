@@ -15,7 +15,7 @@ spring.datasource.password=password
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
 ```
-Then to register the correct spring service you need to check that the annotation ``` @Primary ``` is used at the top of the src/main/java/dataccess/service/MySqlService.java class and that it is not used at the top of the OracleService class.
+Then to register the correct spring service you need to check that the annotation ```java @Primary ``` is used at the top of the src/main/java/dataccess/service/MySqlService.java class and that it is not used at the top of the OracleService class.
 
 
 ### Oracle configuration
@@ -29,4 +29,4 @@ spring.datasource.password=password
 spring.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
 spring.jpa.database-platform=org.hibernate.dialect.Oracle10gDialect
 ```
-Then to register the correct spring service you need to check that the annotation ``` @Primary ``` is used at the top of the src/main/java/dataccess/service/OracleService.java class and that it is not used at the top of the MySqlService class.
+Then to register the correct spring service you need to check that the annotation ```java @Primary ``` is used at the top of the src/main/java/dataccess/service/OracleService.java class and that it is not used at the top of the MySqlService class.

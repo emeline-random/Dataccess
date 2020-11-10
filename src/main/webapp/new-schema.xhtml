@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="common.xhtml" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+    <ui:define name="content">
+        <h:form>
+            <p:inputText value="#{addSchemaController.schemaName}"
+                         label="Schema name (beginning with c## for oracle schema)"/> <br/>
+            <p:password value="#{addSchemaController.password}" label="Password (required for oracle schema"
+                        feedback="true"
+                        rendered="#{addSchemaController.service['class'].simpleName eq 'OracleService'}"/><br/>
+            <p:selectOneRadio value="#{addSchemaController.right}">
+                <f:selectItems value="#{addSchemaController.rights}" var="r" itemValue="#{r}"
+                               itemLabel="#{r.toString().toLowerCase()}"
+                               rendered="#{addSchemaController.service['class'].simpleName eq 'OracleService'}"/>
+            </p:selectOneRadio><br/>
+            <p:commandButton value="Create schema" ajax="false" action="#{addSchemaController.addSchema}"/>
+        </h:form>
+    </ui:define>
+    <ui:define name="footer"/>
+</ui:composition>

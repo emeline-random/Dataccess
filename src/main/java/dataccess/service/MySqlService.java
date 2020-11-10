@@ -253,4 +253,19 @@ public class MySqlService implements QueryService {
     public void setAccess(DatabaseAccess access) {
         this.access = access;
     }
+
+    public void addAdminSchema(String schemaName, String password) throws DaoAccessException {
+        if (schemaName == null || schemaName.equalsIgnoreCase(""))
+            throw new DaoAccessException("Please enter a name for the new database");
+        this.access.executeUpdate("create database " + schemaName);
+    }
+
+    public void addStandardSchema(String schemaName, String password) throws DaoAccessException {
+        this.addAdminSchema(schemaName, password);
+    }
+
+    public void addMinimalSchema(String schemaName, String password) throws DaoAccessException {
+        this.addAdminSchema(schemaName, password);
+
+    }
 }

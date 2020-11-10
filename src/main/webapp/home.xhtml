@@ -14,6 +14,7 @@
                 <p:commandButton ajax="false" value="see database" action="#{databaseLevelController.setDatabase(dt)}"/>
             </p:column>
         </p:dataTable>
+        <p:commandButton action="#{addSchemaController.newSchema}" ajax="false" value="Create schema"/>
     </h:form>
     </ui:define>
     <ui:define name="footer"/>

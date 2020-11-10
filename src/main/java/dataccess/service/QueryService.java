@@ -2,6 +2,7 @@ package dataccess.service;
 
 import dataccess.dao.DaoAccessException;
 import dataccess.model.*;
+import org.springframework.boot.jdbc.DatabaseDriver;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -116,5 +117,11 @@ public interface QueryService {
     void simpleExecution(String query) throws DaoAccessException;
 
     void delete(Table table, Row row) throws DaoAccessException;
+
+    void addAdminSchema(String schemaName, String password) throws DaoAccessException;
+
+    void addStandardSchema(String schemaName, String password) throws DaoAccessException;
+
+    void addMinimalSchema(String userName, String password) throws DaoAccessException;
 
 }

@@ -257,4 +257,33 @@ public class OracleService implements QueryService {
     public void setAccess(DatabaseAccess access) {
         this.access = access;
     }
+
+    public void addAdminSchema(String schemaName, String password) throws DaoAccessException {
+        this.createUser(schemaName, password);
+        this.access.execute("GRANT CREATE session, CONNECT, CREATE table, CREATE view," +
+                " CREATE procedure,CREATE synonym," +
+                " SELECT any table, INSERT any table, DELETE any table, DROP any table," +
+                " UNLIMITED TABLESPACE" +
+                " TO " + schemaName);
+    }
+
+    public void addStandardSchema(String schemaName, String password) throws DaoAccessException {
+        this.createUser(schemaName, password);
+        this.access.execute("GRANT CREATE session, CONNECT, CREATE table, CREATE view," +
+                " UNLIMITED TABLESPACE, SELECT any table" +
+                " TO " + schemaName);
+    }
+
+    public void addMinimalSchema(String schemaName, String password) throws DaoAccessException {
+        this.createUser(schemaName, password);
+        this.access.execute("GRANT CREATE session, CONNECT, SELECT any table to " + schemaName);
+    }
+
+    private void createUser(String schemaName, String password) throws DaoAccessException {
+        if (schemaName == null || !schemaName.toUpperCase().startsWith("C##")) throw new DaoAccessException(
+                "Schema name must begin with \"C##\" !");
+        if (password != null && !password.trim().equalsIgnoreCase(""))
+            this.access.execute("create user " + schemaName + " identified by " + password);
+        else throw new DaoAccessException("Users must have a password to connect to the database");
+    }
 }

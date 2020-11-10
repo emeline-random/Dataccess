@@ -1,11 +1,16 @@
 package dataccess.controllers;
 
-import dataccess.model.Database;
+import dataccess.dao.DaoAccessException;
 import dataccess.service.QueryService;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import java.util.Arrays;
+import java.util.List;
 
 
 @Controller
@@ -13,25 +18,43 @@ import org.springframework.stereotype.Controller;
 public class AddSchemaController {
 
     private QueryService service;
-    private Database newDatabase;
-    private boolean administrator;
-    private boolean standard;
+    private String schemaName;
+    private String password;
+    private Right right;
 
-    /**
-     * GRANT CREATE session, CONNECT, CREATE table, CREATE view,
-     *       CREATE procedure,CREATE synonym,
-     *       ALTER table, ALTER view, ALTER procedure,ALTER synonym,
-     *       DROP table, DROP view, DROP procedure,DROP synonym,
-     *       SELECT any table, INSERT any table, DELETE any table, DROP any table
-     *       TO user;
-     *       alter user data_owner quota unlimited on default_tablespace;
-     * @return
-     */
+    public enum Right{
+        ADMIN, STANDARD, CONSULTATION
+    }
 
+    public List<Right> getRights() {
+        return Arrays.asList(Right.values().clone());
+    }
 
     public String newSchema() {
-        this.newDatabase = new Database("null");
+        this.schemaName = "";
+        this.password = null;
+        this.right = Right.STANDARD;
         return "new-schema";
+    }
+
+    public void addSchema() {
+        try {
+            switch (this.right) {
+                case ADMIN:
+                    this.service.addAdminSchema(this.schemaName, this.password);
+                    break;
+                case STANDARD:
+                    this.service.addStandardSchema(this.schemaName, this.password);
+                    break;
+                case CONSULTATION:
+                    this.service.addMinimalSchema(this.schemaName, this.password);
+            }
+            FacesContext.getCurrentInstance().addMessage("success", new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "schema successfully added", ""));
+        } catch (DaoAccessException e) {
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    e.getMessage(), ""));
+        }
     }
 
     @Autowired

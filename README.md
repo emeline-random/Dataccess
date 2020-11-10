@@ -1,6 +1,6 @@
 # Dataccess
 
-Web application that allows you to administer an Oracle database or a MySql database. The application allows you to list the schemas (exclusively created users starting with c## for oracle database) and to access the tables they contain. It is possible to perform several operations on tables and databases (creation, deletion, consultation). It is also possible to execute queries directly in sql oracle. 
+Web application that allows you to administer an Oracle database or a MySql database. The application allows you to list the schemas (exclusively created users starting with c## for oracle database) and to access the tables they contain. It is possible to perform several operations on tables and databases (creation, deletion, consultation). It is also possible to execute queries directly in sql. 
 
 ## Configuration
 

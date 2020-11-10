@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Controller
-public class TableLevelController { //TODO rajouter un onglet sql plutot qu'un panel en bas de chaque page
+public class TableLevelController {
 
     @Getter
     private Table table;
@@ -65,8 +65,9 @@ public class TableLevelController { //TODO rajouter un onglet sql plutot qu'un p
         try {
             Row parent = this.service.getParentRow(this.table.getForeignKey(attr), row);
             this.rowLevelController.setRow(parent);
-            Table table = new Table(this.table.getForeignKey(attr).getReferencedTableName());
+            Table table = new Table(this.table.getForeignKey(attr).getReferencedTableName(), this.table.getDatabase());
             this.rowLevelController.setTable(table);
+            this.mainController.setCurrentTable(table);
             this.table = table;
         } catch (DaoAccessException e) {
             FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR,

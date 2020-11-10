@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-//@Primary
+@Primary
 public class MySqlService implements QueryService {
 
     private DatabaseAccess access;
@@ -75,8 +75,9 @@ public class MySqlService implements QueryService {
     public ArrayList<ForeignKey> getForeignKeys(Table table) throws DaoAccessException {
         ResultSet rs = this.access.execute("SELECT COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME " +
                 "FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE " +
-                "WHERE REFERENCED_TABLE_SCHEMA = '" + table.getDatabase().getName() + "' " +
-                "AND REFERENCED_TABLE_NAME = '" + table.getName() + "'");
+                "WHERE TABLE_SCHEMA = '" + table.getDatabase().getName() + "' " +
+                "AND TABLE_NAME = '" + table.getName() + "' " +
+                "AND REFERENCED_TABLE_NAME IS NOT NULL");
         ArrayList<ForeignKey> keys = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -104,7 +105,7 @@ public class MySqlService implements QueryService {
         ArrayList<String> keys = new ArrayList<>();
         try {
             while (res.next()) {
-                keys.add(res.getString("k.COLUMN_NAME")); //TODO vérifier ça
+                keys.add(res.getString("k.COLUMN_NAME"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

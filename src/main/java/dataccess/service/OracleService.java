@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-@Primary
+//@Primary
 public class OracleService implements QueryService {
 
     private DatabaseAccess access;
@@ -240,7 +240,7 @@ public class OracleService implements QueryService {
 
     @Override
     public void delete(Table table, Row row) throws DaoAccessException {
-        StringBuilder builder = new StringBuilder("delete from " + table.getName() + " where ");
+        StringBuilder builder = new StringBuilder("delete from " + table.getDatabase() + "." + table.getName() + " where ");
         List<Column> pk = table.getPrimaryKeys();
         if (pk.isEmpty()) throw new DaoAccessException("Primary keys list cannot be empty");
         for (Column c : pk) {

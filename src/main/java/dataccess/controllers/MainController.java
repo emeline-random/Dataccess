@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -91,7 +90,7 @@ public class MainController {
         return "query-result";
     }
 
-    public String nodeRedirection(Object node) { //TODO forcer le rechargement de la table car ne change rien si on ne cahnge pas de page
+    public String nodeRedirection(Object node) {
         if (node instanceof Database) {
             this.databaseLevelController.setDatabase((Database) node);
             return "see-database";

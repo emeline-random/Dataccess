@@ -21,6 +21,17 @@ public class GlobalLevelController {
     private ArrayList<Database> databases = new ArrayList<>();
     private MainController controller;
 
+    public void dropDatabase(Database database) {
+        try {
+            this.service.dropDatabase(database);
+            FacesContext.getCurrentInstance().addMessage("success", new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "schema successfully dropped", ""));
+        } catch (DaoAccessException e) {
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    e.getMessage(), ""));
+        }
+    }
+
     public ArrayList<Database> getDatabases() {
         if (databases.isEmpty()) this.setUp();
         return databases;

@@ -70,6 +70,10 @@ public class QueryController {
         return "database-query";
     }
 
+    public String showClassicalQuery() {
+        return "query";
+    }
+
     @Autowired
     public void setService(QueryService service) {
         this.service = service;

@@ -134,7 +134,7 @@ public class OracleService implements QueryService {
 
     @Override
     public void dropDatabase(Database database) throws DaoAccessException {
-        this.access.execute("drop user " + database.getName());
+        this.access.execute("drop user " + database.getName() + " cascade");
     }
 
     @Override

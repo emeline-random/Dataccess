@@ -64,6 +64,8 @@ public class DatabaseLevelController {
             FacesContext.getCurrentInstance().addMessage("success", new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "database dropped successfully", ""));
             this.globalLevelController.getDatabases().removeIf(d -> this.database.getName().equalsIgnoreCase(d.getName()));
+            TreeNode n = this.mainController.getTree().getNode(this.database.getName());
+            this.mainController.getTree().getChildren().remove(n);
             return "home";
         } catch (DaoAccessException e) {
             FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR,

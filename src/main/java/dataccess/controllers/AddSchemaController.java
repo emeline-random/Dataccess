@@ -1,9 +1,11 @@
 package dataccess.controllers;
 
 import dataccess.dao.DaoAccessException;
+import dataccess.model.Database;
 import dataccess.service.QueryService;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.model.DefaultTreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -18,6 +20,7 @@ import java.util.List;
 public class AddSchemaController {
 
     private QueryService service;
+    private MainController mainController;
     private String schemaName;
     private String password;
     private Right right;
@@ -51,6 +54,7 @@ public class AddSchemaController {
             }
             FacesContext.getCurrentInstance().addMessage("success", new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "schema successfully added", ""));
+            this.mainController.getTree().getChildren().add(new DefaultTreeNode(new Database(this.schemaName)));
         } catch (DaoAccessException e) {
             FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     e.getMessage(), ""));
@@ -60,5 +64,10 @@ public class AddSchemaController {
     @Autowired
     public void setService(QueryService service) {
         this.service = service;
+    }
+
+    @Autowired
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
     }
 }

@@ -4,15 +4,21 @@
                 xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
     <ui:define name="content">
         <h:form>
-            <p:inputText value="#{addSchemaController.schemaName}"
-                         label="Schema name (beginning with c## for oracle schema)"/> <br/>
-            <p:password value="#{addSchemaController.password}" label="Password (required for oracle schema"
-                        feedback="true"
+            <p:menubar >
+                <p:menuitem ajax="false" value="Schemas" action="#{mainController.home}"/>
+                <p:menuitem ajax="false" value="New Schema" action="#{addSchemaController.newSchema}"/>
+                <p:menuitem ajax="false" value="SQL" action="#{queryController.showClassicalQuery}"/>
+            </p:menubar>
+            <p:outputLabel value="Schema name (beginning with c## for oracle schema)" for="schema"/>
+            <p:inputText value="#{addSchemaController.schemaName}" id="schema"/> <br/>
+            <p:outputLabel value="Password (required for oracle schema)" for="password"
+                           rendered="#{addSchemaController.service['class'].simpleName eq 'OracleService'}"/>
+            <p:password value="#{addSchemaController.password}" id="password" feedback="true"
                         rendered="#{addSchemaController.service['class'].simpleName eq 'OracleService'}"/><br/>
-            <p:selectOneRadio value="#{addSchemaController.right}">
+            <p:selectOneRadio value="#{addSchemaController.right}"
+                              rendered="#{addSchemaController.service['class'].simpleName eq 'OracleService'}">
                 <f:selectItems value="#{addSchemaController.rights}" var="r" itemValue="#{r}"
-                               itemLabel="#{r.toString().toLowerCase()}"
-                               rendered="#{addSchemaController.service['class'].simpleName eq 'OracleService'}"/>
+                               itemLabel="#{r.toString().toLowerCase()}"/>
             </p:selectOneRadio><br/>
             <p:commandButton value="Create schema" ajax="false" action="#{addSchemaController.addSchema}"/>
         </h:form>

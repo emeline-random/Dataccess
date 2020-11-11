@@ -4,17 +4,19 @@
                 xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
     <ui:define name="content">
     <h:form>
+        <p:menubar >
+            <p:menuitem ajax="false" value="Schemas" action="#{mainController.home}"/>
+            <p:menuitem ajax="false" value="New Schema" action="#{addSchemaController.newSchema}"/>
+            <p:menuitem ajax="false" value="SQL" action="#{queryController.showClassicalQuery}"/>
+        </p:menubar>
         <p:dataTable value="#{globalLevelController.databases}" var="dt">
-            <p:column>
-                <f:facet name="header">database name</f:facet>
+            <p:column headerText="Database name">
                 <p:outputLabel value="#{dt.name}"/>
             </p:column>
-            <p:column>
-                <f:facet name="header">Details</f:facet>
-                <p:commandButton ajax="false" value="see database" action="#{databaseLevelController.setDatabase(dt)}"/>
+            <p:column headerText="Details">
+                <p:commandButton ajax="false" value="See database" action="#{databaseLevelController.setDatabase(dt)}"/>
             </p:column>
         </p:dataTable>
-        <p:commandButton action="#{addSchemaController.newSchema}" ajax="false" value="Create schema"/>
     </h:form>
     </ui:define>
     <ui:define name="footer"/>

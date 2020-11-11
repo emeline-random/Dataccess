@@ -2,6 +2,8 @@
 
 Web application that allows you to administer an Oracle database or a MySql database. The application allows you to list the schemas (exclusively created users starting with c## for oracle database) and to access the tables they contain. It is possible to perform several operations on tables and databases (creation, deletion, consultation). It is also possible to execute queries directly in sql. 
 
+🔧 In Oracle, schema creation allows to create an "user" with particular rights and a password while in Mysql it allows to create a database that only has a name.
+
 ## Configuration
 
 ### MySql configuration
@@ -16,8 +18,6 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
 ```
 Then to register the correct spring service you need to check that the annotation ``` @Primary ``` is used at the top of the src/main/java/dataccess/service/MySqlService.java class and that it is not used at the top of the OracleService class.
-
-🔧 In Oracle, schema creation allows to create an "user" with particular rights and a password while in Mysql it allows to create a database that only has a name.
 
 ### Oracle configuration
 

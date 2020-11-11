@@ -17,6 +17,7 @@ spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
 ```
 Then to register the correct spring service you need to check that the annotation ``` @Primary ``` is used at the top of the src/main/java/dataccess/service/MySqlService.java class and that it is not used at the top of the OracleService class.
 
+🔧 In Oracle, schema creation allows to create an "user" with particular rights and a password while in Mysql it allows to create a database that only has a name.
 
 ### Oracle configuration
 

@@ -17,7 +17,8 @@ import java.util.List;
 
 @Service
 @Primary
-public class OracleService implements QueryService {
+public class OracleService implements QueryService { //FIXME refaire les accès aux tables en passant par la base de donées
+    //pour éviter les problèmes de table non trouvée en fonction de l'utilisateur connecté
 
     private DatabaseAccess access;
 
@@ -137,7 +138,7 @@ public class OracleService implements QueryService {
         List<Column> attributes = table.getAttributes();
         List<ForeignKey> fk = table.getForeignKeys();
         List<Column> pk = table.getPrimaryKeys();
-        StringBuilder builder = new StringBuilder("update " + table.getName() + " set ");
+        StringBuilder builder = new StringBuilder("update " + table.getDatabase() + "." + table.getName() + " set ");
         this.appendList(row, builder, attributes);
         if (attributes.size() > 0 && fk.size() > 0) builder.append(", ");
         this.appendList(row, builder, fk);

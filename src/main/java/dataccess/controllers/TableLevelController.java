@@ -7,6 +7,7 @@ import dataccess.model.Row;
 import dataccess.model.Table;
 import dataccess.service.QueryService;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -33,6 +34,8 @@ public class TableLevelController {
     private final List<Integer> insertValues = new ArrayList<>(Arrays.asList(1, 3, 5, 10, 15));
     @Getter
     private final ArrayList<Row> insertedRows = new ArrayList<>();
+    @Getter @Setter
+    private boolean modifyRow;
 
     public void setInsertValue(Integer insertValue) {
         this.insertValue = insertValue;
@@ -77,6 +80,7 @@ public class TableLevelController {
     }
 
     public String seeRow(Row row) {
+        this.row = row;
         this.rowLevelController.setRow(row);
         this.rowLevelController.setTable(this.getTable());
         return "see-row";
@@ -108,6 +112,18 @@ public class TableLevelController {
 
     public void setRow(Row row) {
         this.row = row;
+    }
+
+    public void modifyRow() {
+        try {
+            this.service.modifyRow(this.row, this.table);
+            this.modifyRow = false;
+            FacesContext.getCurrentInstance().addMessage("success", new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Row successfully modified", ""));
+        } catch (DaoAccessException e) {
+            FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    e.getMessage(), ""));
+        }
     }
 
     public void dropRow(Row row) {

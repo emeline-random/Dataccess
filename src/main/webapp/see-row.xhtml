@@ -3,23 +3,35 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
     <ui:define name="content">
-    <h:form>
-        <p:dataTable value="#{rowLevelController.row}" var="row">
-            <p:columns var="pk" value="#{tableLevelController.table.primaryKeys}">
-                <f:facet name="header">#{pk}</f:facet>
-                <p:commandLink value="#{row.getAttribute(pk.name)}" ajax="false"
-                               action="#{tableLevelController.seeRow(row)}"/>
-            </p:columns>
-            <p:columns var="attr" value="#{tableLevelController.table.attributes}">
-                <f:facet name="header">#{attr}</f:facet>
-                <p:outputLabel value="#{row.getAttribute(attr)}"/>
-            </p:columns>
-            <p:columns var="fk" value="#{tableLevelController.table.foreignKeys}">
-                <f:facet name="header">#{fk}</f:facet>
-                <p:commandLink value="#{row.getAttribute(fk)}" ajax="false"
-                               action="#{tableLevelController.seeParentRow(fk, row)}"/>
-            </p:columns>
-        </p:dataTable>
-    </h:form>
+        <h:form>
+            <p:dataTable value="#{rowLevelController.row}" var="row" id="table">
+                <p:columns var="pk" value="#{tableLevelController.table.primaryKeys}">
+                    <f:facet name="header">#{pk}</f:facet>
+                    <p:commandLink value="#{row.attributes[pk.name]}" ajax="false"
+                                   action="#{tableLevelController.seeRow(row)}"/>
+                </p:columns>
+                <p:columns var="attr" value="#{tableLevelController.table.attributes}">
+                    <f:facet name="header">#{attr}</f:facet>
+                    <p:inputText value="#{row.attributes[attr.name]}" rendered="#{tableLevelController.modifyRow}"/>
+                    <p:outputLabel value="#{row.attributes[attr.name]}" rendered="#{!tableLevelController.modifyRow}"/>
+                </p:columns>
+                <p:columns var="fk" value="#{tableLevelController.table.foreignKeys}">
+                    <f:facet name="header">#{fk}</f:facet>
+                    <p:commandLink value="#{row.attributes[fk.name]}" ajax="false"
+                                   rendered="#{!tableLevelController.modifyRow}"
+                                   action="#{tableLevelController.seeParentRow(fk, row)}"/>
+                    <p:inputText value="#{row.attributes[fk.name]}" rendered="#{tableLevelController.modifyRow}"/>
+                </p:columns>
+            </p:dataTable>
+            <p:commandButton value="Modify" update="table mod save can" process="@this" id="mod"
+                             action="#{tableLevelController.setModifyRow(true)}" ajax="false"
+                             rendered="#{!tableLevelController.modifyRow}"/>
+            <p:commandButton value="Save" update="table save mod can" process="@this"
+                             action="#{tableLevelController.modifyRow()}" ajax="false"
+                             rendered="#{tableLevelController.modifyRow}" id="save"/>
+            <p:commandButton value="Cancel" update="table can mod save" process="@this" id="can"
+                             action="#{tableLevelController.setModifyRow(false)}" ajax="false"
+                             rendered="#{tableLevelController.modifyRow}"/>
+        </h:form>
     </ui:define>
 </ui:composition>

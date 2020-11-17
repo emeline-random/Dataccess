@@ -30,7 +30,6 @@
                     <p:commandButton value="Delete row" action="#{tableLevelController.dropRow(row)}" ajax="false"/>
                 </p:column>
             </p:dataTable>
-            <p:commandButton value="add row" ajax="false" action="#{tableLevelController.createRow}"/>
             <p:panel rendered="#{tableLevelController.row != null}">
                 <ui:repeat value="#{tableLevelController.row.values}" var="entry" varStatus="status">
                     <p:outputLabel value="#{tableLevelController.row.keys.get(status.index)} "/>

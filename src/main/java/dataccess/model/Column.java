@@ -26,9 +26,7 @@ public class Column {
     public Column(String name, String type) {
         this.name = name;
         this.type = type;
-        if (type.toUpperCase().contains("VARCHAR")) this.sqlType = Type.Types.STRING;
-        else if (type.toUpperCase().contains("DATE")) this.sqlType = Type.Types.DATE;
-        else this.sqlType = Type.Types.NUMBER;
+        this.setType(type);
     }
 
     public Column() {
@@ -36,8 +34,9 @@ public class Column {
 
     public void setType(String type) {
         this.type = type;
-        if (type.toUpperCase().contains("VARCHAR")) this.sqlType = Type.Types.STRING;
-        else if (type.toUpperCase().contains("DATE")) this.sqlType = Type.Types.DATE;
+        String t = type.toLowerCase();
+        if (t.contains("char")) this.sqlType = Type.Types.STRING;
+        else if (t.contains("date") || t.contains("time")) this.sqlType = Type.Types.DATE;
         else this.sqlType = Type.Types.NUMBER;
     }
 

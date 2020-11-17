@@ -102,6 +102,8 @@ public interface QueryService {
         return parent;
     }
 
+    void modifyRow(Row row, Table table) throws DaoAccessException;
+
     void dropDatabase(Database database) throws DaoAccessException;
 
     void truncateTable(Table table) throws DaoAccessException;

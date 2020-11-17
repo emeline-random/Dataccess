@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-//@Primary
+@Primary
 public class OracleService implements QueryService {
 
     private DatabaseAccess access;
@@ -130,6 +130,38 @@ public class OracleService implements QueryService {
                         " where " + foreignKey.getReferencedColumnName() + " = '" +
                         row.getAttribute(foreignKey.getName()) + "'");
         return this.getParentRow(res);
+    }
+
+    @Override
+    public void modifyRow(Row row, Table table) throws DaoAccessException { //FIXME table inexistante
+        List<Column> attributes = table.getAttributes();
+        List<ForeignKey> fk = table.getForeignKeys();
+        List<Column> pk = table.getPrimaryKeys();
+        StringBuilder builder = new StringBuilder("update " + table.getName() + " set ");
+        this.appendList(row, builder, attributes);
+        if (attributes.size() > 0 && fk.size() > 0) builder.append(", ");
+        this.appendList(row, builder, fk);
+        builder.append("where ");
+        for (int i = 0; i < pk.size() - 1; i++) {
+            this.appendAttribute(row, builder, pk.get(i));
+            builder.append(" and ");
+        }
+        if (pk.size() > 0 )this.appendAttribute(row, builder, pk.get(pk.size() - 1));
+        this.access.executeUpdate(new String(builder));
+    }
+
+    private void appendList(Row row, StringBuilder builder, List<? extends Column> columns) {
+        for (int i = 0; i < columns.size() - 1; i++) {
+            this.appendAttribute(row, builder, columns.get(i));
+            builder.append(", ");
+        }
+        if (columns.size() > 0 )this.appendAttribute(row, builder, columns.get(columns.size() - 1));
+        builder.append(" ");
+    }
+
+    private void appendAttribute(Row row, StringBuilder builder, Column column) {
+        String s = Type.isString(column.getSqlType()) ? "'" : "";
+        builder.append(column.getName()).append(" = ").append(s).append(row.getAttribute(column.getName())).append(s);
     }
 
     @Override

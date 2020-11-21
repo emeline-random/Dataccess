@@ -125,9 +125,9 @@ public class OracleService implements QueryService { //FIXME refaire les accès 
     }
 
     @Override
-    public Row getParentRow(ForeignKey foreignKey, Row row) throws DaoAccessException {
+    public Row getParentRow(ForeignKey foreignKey, Row row, Table table) throws DaoAccessException {
         ResultSet res = this.access.execute(
-                "select * from " + foreignKey.getReferencedTableName() +
+                "select * from " + table.getDatabase().getName() + "." + foreignKey.getReferencedTableName() +
                         " where " + foreignKey.getReferencedColumnName() + " = '" +
                         row.getAttribute(foreignKey.getName()) + "'");
         return this.getParentRow(res);
@@ -147,7 +147,7 @@ public class OracleService implements QueryService { //FIXME refaire les accès 
             this.appendAttribute(row, builder, pk.get(i));
             builder.append(" and ");
         }
-        if (pk.size() > 0 )this.appendAttribute(row, builder, pk.get(pk.size() - 1));
+        if (pk.size() > 0) this.appendAttribute(row, builder, pk.get(pk.size() - 1));
         this.access.executeUpdate(new String(builder));
     }
 
@@ -156,7 +156,7 @@ public class OracleService implements QueryService { //FIXME refaire les accès 
             this.appendAttribute(row, builder, columns.get(i));
             builder.append(", ");
         }
-        if (columns.size() > 0 )this.appendAttribute(row, builder, columns.get(columns.size() - 1));
+        if (columns.size() > 0) this.appendAttribute(row, builder, columns.get(columns.size() - 1));
         builder.append(" ");
     }
 
@@ -291,6 +291,7 @@ public class OracleService implements QueryService { //FIXME refaire les accès 
         this.access = access;
     }
 
+    @Override
     public void addAdminSchema(String schemaName, String password) throws DaoAccessException {
         this.createUser(schemaName, password);
         this.access.execute("GRANT CREATE session, CONNECT, CREATE table, CREATE view," +
@@ -300,6 +301,7 @@ public class OracleService implements QueryService { //FIXME refaire les accès 
                 " TO " + schemaName);
     }
 
+    @Override
     public void addStandardSchema(String schemaName, String password) throws DaoAccessException {
         this.createUser(schemaName, password);
         this.access.execute("GRANT CREATE session, CONNECT, CREATE table, CREATE view," +
@@ -307,9 +309,24 @@ public class OracleService implements QueryService { //FIXME refaire les accès 
                 " TO " + schemaName);
     }
 
+    @Override
     public void addMinimalSchema(String schemaName, String password) throws DaoAccessException {
         this.createUser(schemaName, password);
         this.access.execute("GRANT CREATE session, CONNECT, SELECT any table to " + schemaName);
+    }
+
+    @Override
+    public void addColumn(Table table, Column column) throws DaoAccessException {
+        StringBuilder builder = new StringBuilder("alter table " + table.getDatabase() + "." + table.getName() +
+                " add " + column.getName() + " " + column.getType());
+        if (column.isNullable()) builder.append(" not null");
+        if (column.isUnique()) builder.append(" unique");
+        if (column instanceof ForeignKey) {
+            builder.append(" references ").append(table.getDatabase().getName()).append(".")
+                    .append(((ForeignKey) column).getReferencedTableName()).append("(")
+                    .append(((ForeignKey) column).getReferencedColumnName()).append(")");
+        }
+        this.access.executeUpdate(new String(builder));
     }
 
     private void createUser(String schemaName, String password) throws DaoAccessException {

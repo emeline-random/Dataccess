@@ -117,7 +117,7 @@ public class MySqlService implements QueryService {
     }
 
     @Override
-    public Row getParentRow(ForeignKey foreignKey, Row row) throws DaoAccessException { //TODO vérifier
+    public Row getParentRow(ForeignKey foreignKey, Row row, Table table) throws DaoAccessException {
         ResultSet res = this.access.execute(
                 "select * from " + foreignKey.getReferencedTableName() +
                         " where " + foreignKey.getReferencedColumnName() + " = '" +
@@ -286,18 +286,35 @@ public class MySqlService implements QueryService {
         this.access = access;
     }
 
+    @Override
     public void addAdminSchema(String schemaName, String password) throws DaoAccessException {
         if (schemaName == null || schemaName.equalsIgnoreCase(""))
             throw new DaoAccessException("Please enter a name for the new database");
         this.access.executeUpdate("create database " + schemaName);
     }
 
+    @Override
     public void addStandardSchema(String schemaName, String password) throws DaoAccessException {
         this.addAdminSchema(schemaName, password);
     }
 
+    @Override
     public void addMinimalSchema(String schemaName, String password) throws DaoAccessException {
         this.addAdminSchema(schemaName, password);
 
+    }
+
+    @Override
+    public void addColumn(Table table, Column column) throws DaoAccessException {
+        StringBuilder builder = new StringBuilder("alter table " + table.getDatabase() + "." + table.getName() +
+                " add " + column.getName() + " " + column.getType());
+        if (column.isNullable()) builder.append(" not null");
+        if (column.isUnique()) builder.append(" unique");
+        if (column instanceof ForeignKey) {
+            builder.append(" references ").append(table.getDatabase().getName()).append(".")
+                    .append(((ForeignKey) column).getReferencedTableName()).append("(")
+                    .append(((ForeignKey) column).getReferencedColumnName()).append(")");
+        }
+        this.access.executeUpdate(new String(builder));
     }
 }

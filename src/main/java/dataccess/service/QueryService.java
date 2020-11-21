@@ -2,7 +2,6 @@ package dataccess.service;
 
 import dataccess.dao.DaoAccessException;
 import dataccess.model.*;
-import org.springframework.boot.jdbc.DatabaseDriver;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -84,7 +83,7 @@ public interface QueryService {
 
     ArrayList<String> getPrimaryKey(Table table) throws DaoAccessException;
 
-    Row getParentRow(ForeignKey foreignKey, Row row) throws DaoAccessException;
+    Row getParentRow(ForeignKey foreignKey, Row row, Table table) throws DaoAccessException;
 
     default Row getParentRow(ResultSet res) throws DaoAccessException {
         Row parent = new Row();
@@ -112,9 +111,9 @@ public interface QueryService {
 
     void dropTable(Table table) throws DaoAccessException;
 
-    void addRow (Table table, Row row) throws DaoAccessException;
+    void addRow(Table table, Row row) throws DaoAccessException;
 
-    Table execute (String query) throws DaoAccessException, SQLException;
+    Table execute(String query) throws DaoAccessException, SQLException;
 
     void simpleExecution(String query) throws DaoAccessException;
 
@@ -125,5 +124,7 @@ public interface QueryService {
     void addStandardSchema(String schemaName, String password) throws DaoAccessException;
 
     void addMinimalSchema(String userName, String password) throws DaoAccessException;
+
+    void addColumn(Table table, Column column) throws DaoAccessException;
 
 }

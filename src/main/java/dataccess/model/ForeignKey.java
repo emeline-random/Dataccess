@@ -9,10 +9,17 @@ public class ForeignKey extends Column{
 
     private String referencedColumnName;
     private String referencedTableName;
-    private String name;
 
     public ForeignKey() {
         super();
+    }
+
+    public ForeignKey(Column c) {
+        this.setName(c.getName());
+        this.setType(c.getType());
+        this.setNullable(c.isNullable());
+        this.setUnique(c.isUnique());
+        this.setCheckList(c.getCheckList());
     }
 
     public ForeignKey(String columnName, String referencedTableName, String  referencedColumnName) {

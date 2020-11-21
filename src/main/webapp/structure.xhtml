@@ -33,6 +33,31 @@
                     <p:outputLabel value="#{column['class'].simpleName eq 'ForeignKey'}"/>
                 </p:column>
             </p:dataTable>
+            <p:commandButton value="Create column" rendered="#{!tableLevelController.addColumn}"
+                             action="#{tableLevelController.createColumn}" ajax="false"/>
+            <p:panel rendered="#{tableLevelController.addColumn}">
+                <p:outputLabel for="name" value="Column name "/>
+                <p:inputText value="#{tableLevelController.column.name}" id="name"/>
+                <p:outputLabel for="type" value="Column type "/>
+                <p:inputText value="#{tableLevelController.column.type}" id="type"/>
+                <p:outputLabel for="u" value="Unique "/>
+                <p:selectBooleanCheckbox value="#{tableLevelController.column.unique}" id="u"/>
+                <p:outputLabel for="n" value="Nullable "/>
+                <p:selectBooleanCheckbox value="#{tableLevelController.column.nullable}" id="n"/><br/>
+                <p:outputLabel for="rt" value="Referenced table name "
+                               rendered="#{tableLevelController.column['class'].simpleName eq 'ForeignKey'}"/>
+                <p:inputText value="#{tableLevelController.column.referencedTableName}" id="rt"
+                             rendered="#{tableLevelController.column['class'].simpleName eq 'ForeignKey'}"/>
+                <p:outputLabel for="rc" value="Referenced column name "
+                               rendered="#{tableLevelController.column['class'].simpleName eq 'ForeignKey'}"/>
+                <p:inputText value="#{tableLevelController.column.referencedColumnName}" id="rc"
+                             rendered="#{tableLevelController.column['class'].simpleName eq 'ForeignKey'}"/>
+                <p:commandButton value="Switch to foreign Key" action="#{tableLevelController.switchToForeignKey()}"
+                                 ajax="false" rendered="#{tableLevelController.column['class'].simpleName eq 'Column'}"/>
+                <p:commandButton value="Switch to classical column" action="#{tableLevelController.switchToClassicalColumn()}"
+                                 ajax="false" rendered="#{tableLevelController.column['class'].simpleName eq 'ForeignKey'}"/>
+                <p:commandButton value="Add column" ajax="false" action="#{tableLevelController.addColumn()}"/>
+            </p:panel>
         </h:form>
     </ui:define>
 </ui:composition>

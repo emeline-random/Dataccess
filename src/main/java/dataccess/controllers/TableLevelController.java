@@ -19,23 +19,21 @@ import java.util.HashMap;
 import java.util.List;
 
 @Controller
+@Getter
+@Setter
 public class TableLevelController {
 
-    @Getter
     private Table table;
     private Row row;
     private QueryService service;
     private RowLevelController rowLevelController;
     private MainController mainController;
     private DatabaseLevelController databaseLevelController;
-    @Getter
+    private Column column;
     private Integer insertValue = 1;
-    @Getter
     private final List<Integer> insertValues = new ArrayList<>(Arrays.asList(1, 3, 5, 10, 15));
-    @Getter
     private final ArrayList<Row> insertedRows = new ArrayList<>();
-    @Getter @Setter
-    private boolean modifyRow;
+    private boolean modifyRow, addColumn;
 
     public void setInsertValue(Integer insertValue) {
         this.insertValue = insertValue;
@@ -66,7 +64,7 @@ public class TableLevelController {
 
     public String seeParentRow(String attr, Row row) {
         try {
-            Row parent = this.service.getParentRow(this.table.getForeignKey(attr), row);
+            Row parent = this.service.getParentRow(this.table.getForeignKey(attr), row, this.table);
             this.rowLevelController.setRow(parent);
             Table table = new Table(this.table.getForeignKey(attr).getReferencedTableName(), this.table.getDatabase());
             this.rowLevelController.setTable(table);
@@ -106,14 +104,6 @@ public class TableLevelController {
         return "structure";
     }
 
-    public Row getRow() {
-        return row;
-    }
-
-    public void setRow(Row row) {
-        this.row = row;
-    }
-
     public void modifyRow() {
         try {
             this.service.modifyRow(this.row, this.table);
@@ -123,6 +113,40 @@ public class TableLevelController {
         } catch (DaoAccessException e) {
             FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     e.getMessage(), ""));
+        }
+    }
+
+    public void createColumn() {
+        this.column = new Column();
+        this.addColumn = true;
+    }
+
+    public String addColumn() {
+        try {
+            this.service.addColumn(this.table, this.column);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Column successfully added", ""));
+            if (this.column instanceof ForeignKey) {
+                this.table.getForeignKeys().add((ForeignKey) this.column);
+            } else {
+                this.table.getAttributes().add(this.column);
+            }
+            this.column = null;
+            this.addColumn = false;
+        } catch (DaoAccessException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    e.getMessage(), ""));
+        }
+        return this.structure();
+    }
+
+    public void switchToForeignKey() {
+        this.column = new ForeignKey(this.column);
+    }
+
+    public void switchToClassicalColumn() {
+        if (this.column instanceof ForeignKey) {
+            this.column = new Column((ForeignKey) this.column);
         }
     }
 

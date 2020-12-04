@@ -127,4 +127,6 @@ public interface QueryService {
 
     void addColumn(Table table, Column column) throws DaoAccessException;
 
+    void removeColumn(Table table, Column column) throws DaoAccessException;
+
 }

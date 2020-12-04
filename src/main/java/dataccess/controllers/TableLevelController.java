@@ -30,6 +30,7 @@ public class TableLevelController {
     private MainController mainController;
     private DatabaseLevelController databaseLevelController;
     private Column column;
+    private Column columnToRemove;
     private Integer insertValue = 1;
     private final List<Integer> insertValues = new ArrayList<>(Arrays.asList(1, 3, 5, 10, 15));
     private final ArrayList<Row> insertedRows = new ArrayList<>();
@@ -138,6 +139,34 @@ public class TableLevelController {
                     e.getMessage(), ""));
         }
         return this.structure();
+    }
+
+    public void cancelAddColumn() {
+        this.column = new Column();
+        this.addColumn = false;
+    }
+
+    public void removeColumn() {
+        if (this.columnToRemove != null) {
+            try {
+                this.service.removeColumn(this.table, this.columnToRemove);
+                FacesContext.getCurrentInstance().addMessage("success", new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "column deleted successfully", ""));
+                this.table.removeColumn(this.columnToRemove);
+                this.columnToRemove = new Column();
+            } catch (DaoAccessException e) {
+                FacesContext.getCurrentInstance().addMessage("error", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        e.getMessage(), ""));
+            }
+        }
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnToRemove = this.table.getColumn(columnName);
+    }
+
+    public String getColumnName() {
+        return this.columnToRemove == null ? null : this.columnToRemove.getName();
     }
 
     public void switchToForeignKey() {

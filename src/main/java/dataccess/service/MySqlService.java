@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-//@Primary
+@Primary
 public class MySqlService implements QueryService {
 
     private DatabaseAccess access;
@@ -308,7 +308,7 @@ public class MySqlService implements QueryService {
     public void addColumn(Table table, Column column) throws DaoAccessException {
         StringBuilder builder = new StringBuilder("alter table " + table.getDatabase() + "." + table.getName() +
                 " add " + column.getName() + " " + column.getType());
-        if (column.isNullable()) builder.append(" not null");
+        if (!column.isNullable()) builder.append(" not null");
         if (column.isUnique()) builder.append(" unique");
         if (column instanceof ForeignKey) {
             builder.append(" references ").append(table.getDatabase().getName()).append(".")
@@ -316,5 +316,10 @@ public class MySqlService implements QueryService {
                     .append(((ForeignKey) column).getReferencedColumnName()).append(")");
         }
         this.access.executeUpdate(new String(builder));
+    }
+
+    @Override
+    public void removeColumn(Table table, Column column) throws DaoAccessException {
+        this.access.executeUpdate("alter table " + table.getName() + " drop column " + column.getName());
     }
 }

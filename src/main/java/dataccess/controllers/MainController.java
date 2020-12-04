@@ -95,6 +95,7 @@ public class MainController {
             this.databaseLevelController.setDatabase((Database) node);
             return "see-database";
         } else if (node instanceof Table){
+            this.databaseLevelController.setDatabase(((Table) node).getDatabase());
             this.tableLevelController.setTable((Table) node);
             return "see-table";
         }

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-@Primary
+//@Primary
 public class OracleService implements QueryService { //FIXME refaire les accès aux tables en passant par la base de donées
     //pour éviter les problèmes de table non trouvée en fonction de l'utilisateur connecté
 
@@ -315,11 +315,19 @@ public class OracleService implements QueryService { //FIXME refaire les accès 
         this.access.execute("GRANT CREATE session, CONNECT, SELECT any table to " + schemaName);
     }
 
+    private void createUser(String schemaName, String password) throws DaoAccessException {
+        if (schemaName == null || !schemaName.toUpperCase().startsWith("C##")) throw new DaoAccessException(
+                "Schema name must begin with \"C##\" !");
+        if (password != null && !password.trim().equalsIgnoreCase(""))
+            this.access.execute("create user " + schemaName + " identified by " + password);
+        else throw new DaoAccessException("Users must have a password to connect to the database");
+    }
+
     @Override
     public void addColumn(Table table, Column column) throws DaoAccessException {
         StringBuilder builder = new StringBuilder("alter table " + table.getDatabase() + "." + table.getName() +
                 " add " + column.getName() + " " + column.getType());
-        if (column.isNullable()) builder.append(" not null");
+        if (!column.isNullable()) builder.append(" not null");
         if (column.isUnique()) builder.append(" unique");
         if (column instanceof ForeignKey) {
             builder.append(" references ").append(table.getDatabase().getName()).append(".")
@@ -329,11 +337,9 @@ public class OracleService implements QueryService { //FIXME refaire les accès 
         this.access.executeUpdate(new String(builder));
     }
 
-    private void createUser(String schemaName, String password) throws DaoAccessException {
-        if (schemaName == null || !schemaName.toUpperCase().startsWith("C##")) throw new DaoAccessException(
-                "Schema name must begin with \"C##\" !");
-        if (password != null && !password.trim().equalsIgnoreCase(""))
-            this.access.execute("create user " + schemaName + " identified by " + password);
-        else throw new DaoAccessException("Users must have a password to connect to the database");
+    @Override
+    public void removeColumn(Table table, Column column) throws DaoAccessException {
+        this.access.executeUpdate("alter table " + table.getDatabase() +"."+ table.getName() + " drop" +
+                " column " + column.getName());
     }
 }

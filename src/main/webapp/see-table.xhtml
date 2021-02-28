@@ -11,7 +11,7 @@
                 <p:menuitem ajax="false" value="SQL" action="#{queryController.showTableQuery}"/>
                 <p:menuitem ajax="false" value="Operations" action="#{tableLevelController.operations}"/>
             </p:menubar>
-            <p:dataTable value="#{tableLevelController.getRows()}" var="row" id="table" styleClass="column-b">
+            <p:dataTable value="#{tableLevelController.getRows()}" var="row" id="table">
                 <p:columns var="pk" value="#{tableLevelController.table.primaryKeys}">
                     <f:facet name="header">#{pk}</f:facet>
                     <p:commandLink value="#{row.getAttribute(pk.name)}" ajax="false"

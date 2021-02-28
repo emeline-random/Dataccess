@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-//@Primary
-public class OracleService implements QueryService { //FIXME refaire les accès aux tables en passant par la base de donées
+@Primary
+public class OracleService implements dataccess.service.QueryService {
     //pour éviter les problèmes de table non trouvée en fonction de l'utilisateur connecté
 
     private DatabaseAccess access;

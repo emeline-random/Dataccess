@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-@Primary
-public class MySqlService implements QueryService {
+//@Primary
+public class MySqlService implements dataccess.service.QueryService {
 
     private DatabaseAccess access;
 
@@ -263,7 +263,7 @@ public class MySqlService implements QueryService {
 
     @Override
     public void simpleExecution(String query) throws DaoAccessException {
-        this.access.execute(query);
+        this.access.executeUpdate(query);
     }
 
     @Override

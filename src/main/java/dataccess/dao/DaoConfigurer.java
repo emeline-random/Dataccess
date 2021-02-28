@@ -22,8 +22,8 @@ public class DaoConfigurer {
     private String driver;
     private String url;
 
-    public DaoConfigurer() {
-        try (FileInputStream fis = new FileInputStream("target/classes/application.properties")) {
+    public DaoConfigurer() { //fixme retirer le path absolu
+        try (FileInputStream fis = new FileInputStream("C:\\Users\\mimin\\IdeaProjects\\Dataccess\\src\\main\\resources\\application.properties")) {
             Properties prop = new Properties();
             prop.load(fis);
             this.username = prop.getProperty("spring.datasource.username");
@@ -43,7 +43,7 @@ public class DaoConfigurer {
         p.setDriverClassName(driver);
         p.setUsername(username);
         p.setPassword(password);
-        this.source = new org.apache.tomcat.jdbc.pool.DataSource(p);
+        this.source = new DataSource(p);
         this.source.setPoolProperties(p);
     }
 

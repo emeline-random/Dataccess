@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui">
+<h:head/>
+<ui:component>
+    <composite:interface>
+        <composite:attribute name="valeurs" type="java.util.List" required="true"/>
+        <composite:attribute name="dayName" type="java.lang.String" required="false"/>
+        <composite:attribute name="date" type="java.lang.String" required="false"/>
+    </composite:interface>
+    <composite:implementation>
+        <p:dataList value="#{cc.attrs.courses}" var="event" type="definition" styleClass="events-mobile-list" id="list">
+            <f:facet name="header">#{cc.attrs.dayName} #{cc.attrs.date}</f:facet>
+            <p:panel styleClass="events-mobile" rendered="#{!event.dayEvent}">
+                <h:outputText value="#{event.startDateFormatted}-#{event.endDateFormatted}" styleClass="events-mobile"/><br/>
+                <h:outputText value="#{event.libelleCourse}" styleClass="events-mobile"/><br/>
+                <p:outputLabel value="#{bundle.Commentaire} : #{event.commentaire}" styleClass="events-mobile"
+                               rendered="#{event.commentaire != null}"/><br/>
+                <h:outputText value="#{bundle.Intervenants} : " styleClass="events-mobile"
+                              rendered="#{event.trainerList.size() > 0}"/>
+                <ui:repeat value="#{event.trainerList}" var="trainer">
+                    <h:outputText styleClass="events-mobile"
+                                  value="#{trainer.gradeIntervenant} #{trainer.nomIntervenant} #{trainer.prenomIntervenant} "/>
+                </ui:repeat><br/>
+                <h:outputText value="#{bundle.Lieux} : " styleClass="events-mobile"
+                              rendered="#{event.locationList.size() > 0}"/>
+                <ui:repeat value="#{event.locationList}" var="lieu">
+                    <h:outputText value="#{lieu.libelleLieu} " styleClass="events-mobile"/>
+                </ui:repeat><br/>
+                <h:outputText value="#{bundle.Stages} : " styleClass="events-mobile"
+                              rendered="#{event.stageList.size() > 0}"/>
+                <ui:repeat value="#{event.stageList}" var="stage">
+                    <h:outputText value="#{stage.libStage} " styleClass="events-mobile"/>
+                </ui:repeat><br/>
+            </p:panel>
+        </p:dataList>
+    </composite:implementation>
+</ui:component>
+</html>

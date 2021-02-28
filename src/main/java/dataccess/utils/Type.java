@@ -2,7 +2,9 @@ package dataccess.utils;
 
 import org.springframework.stereotype.Controller;
 
-import javax.faces.convert.*;
+import javax.faces.convert.Converter;
+import javax.faces.convert.DateTimeConverter;
+import javax.faces.convert.IntegerConverter;
 
 @Controller
 public class Type {

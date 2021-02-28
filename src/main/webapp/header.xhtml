@@ -7,7 +7,7 @@
     <ui:composition>
         <h:form>
             <p:breadCrumb>
-                <p:menuitem value="home" action="#{mainController.home}" ajax="false" icon="fas fa-home fa-sm"/>
+                <p:menuitem value="home" action="#{mainController.home}" ajax="false"/>
                 <p:menuitem rendered="#{mainController.currentBase != null}" value="#{mainController.currentBase.name}"
                             ajax="false" action="#{mainController.seeBase()}"/>
                 <p:menuitem rendered="#{mainController.currentTable != null}"

@@ -1,0 +1,71 @@
+.column-l {
+    float: left;
+    width: 15%;
+    white-space: nowrap;
+}
+
+.column-b {
+    float: left;
+    width: 85%;
+    white-space: nowrap;
+}
+
+.tree-button {
+    background: none !important;
+    border: none !important;
+}
+
+.ui-tree {
+    width: auto !important;
+}
+
+.body{
+    color: darkslategrey;
+    background-color: lightcyan;
+}
+
+.ui-datatable-tablewrapper {
+    width: 100%;
+}
+
+/*.ui-widget-header {*/
+/*    background: darkslategrey;*/
+/*    color: white;*/
+/*}*/
+
+/*.ui-widget-header a {*/
+/*    color: white;*/
+/*    font-style: normal;*/
+/*    font-weight: normal;*/
+/*}*/
+
+.ui-widget-content a {
+    color: white;
+}
+
+.ui-breadcrumb-chevron {
+    margin-top: 5px;
+}
+
+.ui-widget .ui-widget {
+    color:  #4f4f4f;
+}
+
+/*.ui-menu {*/
+/*    background: darkcyan;*/
+/*    color: white;*/
+/*}*/
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+body .ui-menu.ui-menubar {
+    background: lightblue;
+}
+
+body .ui-breadcrumb {
+    background: lightsteelblue;
+}

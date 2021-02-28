@@ -10,11 +10,11 @@ The war file containing the application under the release folder can be deployed
 
 To start the server on Windows : 
 ```bash
-apache-tomcat-9.0.40> ./bin/catalina.bat run
+apache-tomcat-9.0.40 > ./bin/catalina.bat run
 ```
 To start the server on Linux : 
 ```bash
-apache-tomcat-9.0.40> ./bin/catalina.sh run
+apache-tomcat-9.0.40 > ./bin/catalina.sh run
 ```
 
 ## Configuration

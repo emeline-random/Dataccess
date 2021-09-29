@@ -4,6 +4,19 @@ Web application that allows you to administer an Oracle database or a MySql data
 
 🔧 In Oracle, schema creation allows to create an "user" with particular rights and a password while in Mysql it allows to create a database that only has a name.
 
+## Deployment
+
+The war file containing the application under the release folder can be deployed in an Apache Tomcat server (tested on v9.0.40). To launch the application you just need to put the war file under the webapps folder of Tomcat and start/restart the server.
+
+To start the server on Windows : 
+```bash
+apache-tomcat-9.0.40 > ./bin/catalina.bat run
+```
+To start the server on Linux : 
+```bash
+apache-tomcat-9.0.40 > ./bin/catalina.sh run
+```
+
 ## Configuration
 
 ### MySql configuration

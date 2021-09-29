@@ -28,7 +28,7 @@ public class Table {
 
     public Column getColumn(String columnName) {
         for (Column column : this.attributes)
-            if (column.getName().toUpperCase().equals(columnName.toUpperCase())) return column;
+            if (column.getName().equalsIgnoreCase(columnName)) return column;
         return null;
     }
 
@@ -58,7 +58,7 @@ public class Table {
 
     public ForeignKey getForeignKey(String name) {
         for (ForeignKey key : this.foreignKeys) {
-            if (key.getName().toLowerCase().equals(name.toLowerCase())) return key;
+            if (key.getName().equalsIgnoreCase(name)) return key;
         }
         return null;
     }

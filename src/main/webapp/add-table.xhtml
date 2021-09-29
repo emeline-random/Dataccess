@@ -64,6 +64,7 @@
             </p:column>
         </p:dataTable><br/>
         <p:commandButton value="preview" ajax="false" action="#{addTableController.previewTable}"/><br/>
+        <p:outputPanel> <h:outputText escape="false" value="#{addTableController.preview}"/></p:outputPanel><br/>
         <p:commandButton value="create table" ajax="false" action="#{addTableController.createTable}"/><br/>
     </h:form>
     </ui:define>

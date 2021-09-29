@@ -6,7 +6,8 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Setter
+@Getter
+@Setter
 public class Table {
 
     private ArrayList<Row> rows;
@@ -66,16 +67,18 @@ public class Table {
         return this.primaryKeys.stream().anyMatch(primaryKey -> primaryKey.getName().equalsIgnoreCase(column.getName()));
     }
 
-    public void print() {
-        System.out.println(this.name.toUpperCase() + "\n");
+    public String print() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(this.name.toUpperCase()).append("<br/><br/>");
         for (Column column : this.attributes) {
-            System.out.println(column.getName() + " " + column.getSqlType() + " null=" + column.isNullable() +
-                    " unique=" + column.isUnique() + "\n");
+            builder.append(column.getName()).append(" ").append(column.getSqlType()).append(" null=")
+                    .append(column.isNullable()).append(" unique=").append(column.isUnique()).append("<br/><br/>");
         }
-        System.out.println("primary keys : ");
-        for (Column pk : this.primaryKeys) System.out.println(pk);
-        System.out.println("foreign keys : ");
-        for (ForeignKey fk : this.foreignKeys) System.out.println(fk.getName());
+        builder.append("primary keys : <br/>");
+        for (Column pk : this.primaryKeys) builder.append(pk).append("<br/>");
+        builder.append("foreign keys : ").append("<br/>");
+        for (ForeignKey fk : this.foreignKeys) builder.append(fk.getName()).append("<br/>");
+        return builder.toString();
     }
 
     @Override

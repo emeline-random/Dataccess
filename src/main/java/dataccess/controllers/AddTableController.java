@@ -6,6 +6,7 @@ import dataccess.model.Column;
 import dataccess.model.ForeignKey;
 import dataccess.model.Table;
 import dataccess.service.QueryService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -20,6 +21,8 @@ public class AddTableController {
     private QueryService service;
     private TableLevelController tableLevelController;
     private DatabaseLevelController databaseLevelController;
+    @Getter
+    private String preview = "";
 
     public String createTable() {
         try {
@@ -49,7 +52,7 @@ public class AddTableController {
     }
 
     public void previewTable() {
-        this.table.print();
+        this.preview = this.table.print();
     }
 
     public Table getTable() {
@@ -61,6 +64,7 @@ public class AddTableController {
         this.table.setPrimaryKeys(new ArrayList<>());
         this.table.setForeignKeys(new ArrayList<>());
         this.table.setAttributes(new ArrayList<>());
+        preview = "";
         return "add-table";
     }
 
